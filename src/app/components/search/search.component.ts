@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { catchError, debounceTime, fromEvent, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search',
@@ -13,10 +14,14 @@ export class SearchComponent {
 
   word$!: Observable<string>;
 
-  constructor () {}
+  constructor (
+    private searchService: SearchService,
+  ) {}
 
   searchWord (query:string) {
-    console.log(query);
+    // console.log(query);
+    // this.word$ = this.searchService.search(query);
+    // console.log(val$)
     
     
   }
