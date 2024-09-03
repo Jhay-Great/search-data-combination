@@ -1,1 +1,7 @@
-<p>combined works!</p>
+
+<h2> Combined Data Observables </h2>
+@for (value of (data$ | async); track $index) {
+    <p>
+        {{value}}
+    </p>
+}

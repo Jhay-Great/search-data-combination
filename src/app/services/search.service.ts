@@ -6,4 +6,10 @@ import { Injectable } from '@angular/core';
 export class SearchService {
 
   constructor() { }
+
+  search (query:string) {
+    
+  }
+  
+  
 }
