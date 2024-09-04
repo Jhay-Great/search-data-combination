@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { debounceTime, filter, map, of, scan, Subject, switchMap, tap } from 'rxjs';
+import { catchError, debounceTime, delay, distinctUntilChanged, filter, map, of, scan, Subject, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,73 +16,53 @@ export class SearchService {
     {name: 'Emerald', gender: 'female', nationality: 'Ghanaian'},
   ];
 
-  private subject$ = new Subject<string[]>();
+  private subject$ = new Subject<string>();
+  error: string | null = null;
 
   constructor() { }
 
-  private transform () {
-
-    // return this.subject$.pipe(
-    //   debounceTime(500), // Debounce to limit how often the search is triggered
-    //   scan((acc, char) => acc + char, ''), // Accumulate characters into a string
-    //   map(query => query.trim()) // Trim spaces if necessary
-    // )
-    // .subscribe(query => {
-    //   // Handle the final query here, e.g., make an HTTP request
-    //   console.log('Final query:', query);
-    // });
-    
-    // console.log()
-
-    /**something */
-    
-    
-    // const data$ = of(query);
-    // return this.subject$.pipe(
-    //   tap(console.log)
-      // debounceTime(500),
-      // scan((acc, char) => acc + char, ''),
-      // map(word => [...word]),
-      // filter(word => word.length >= 3), 
-      // switchMap(word => word.join('')),
-      // tap(console.log),
-      
-    // )
-    // .subscribe(
-    //   val => console.log(val),
-    // )
-  }
-
-  // private transform() {
-  //   return this.subject$.pipe(
-  //     debounceTime(500),  // Wait for 500ms pause in events
-  //     map(word => [...word]), // Convert string to array of characters
-  //     filter(chars => chars.length >= 3), // Only process if length >= 3
-  //     switchMap(chars => {
-  //       const query = chars.join(''); // Convert array back to string
-  //       // Perform an async operation, e.g., API call
-  //       // return ajax.getJSON(`https://api.example.com/search?q=${query}`);
-  //     }),
-  //     tap(console.log) // Log the result for debugging
-  //   );
-  // }
-
-
   search (query:string) {
-    const data = [...query];
-    console.log(data);
-    this.subject$.next(data);
-    // this.subject$.next(query);
+    this.subject$.next(query)
   }
 
-  getWord () {
-    // console.log('triggered...')
-    // this.transform()
-    // return of('s')
-    return this.transform()
+  private searchHandler() {
+    return this.subject$
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => {
+        if (term.length <= 3) {
+          return of(this.data);
+        }
+        try {
+          const result = this.dataLookup(term);
+          return of(result).pipe(delay(500));
+        } catch (err) {
+          this.error = 'Error fetching results';
+          return of([]);
+        }
+      }),
+      catchError(err => {
+        this.error = 'Error fetching results';
+        return of([]);
+      })
+    )
+    
   }
 
-  
-  
-  
+  searchResult () {
+    return this.searchHandler();
+  }
+
+
+  private dataLookup(term: string) {
+    return this.data.filter((item:any) =>
+      item.name.toLowerCase().includes(term.toLowerCase())
+    );
+  }
+
 }
+
+  
+  
+

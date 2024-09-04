@@ -12,24 +12,24 @@ import { SearchService } from '../../services/search.service';
 })
 export class SearchComponent {
 
-  word$!: Observable<string>;
+  // word$!: Observable<string>;
+  word$!: Observable<never[] | { name: string; gender: string; nationality: string; }[]>;
+  loading = false;
+  error: string | null = null;
 
   constructor (
     private searchService: SearchService,
   ) {
-    this.word$ = this.searchService.getWord();
+    this.word$ = this.searchService.searchResult()
+    this.searchService.searchResult().subscribe(
+      val => console.log(val),  
+    )
+    // this.word$ = this.searchService.getWord();
     // console.log(this.word$);
   }
 
   searchWord (query:string) {
-    // const data = [...query];
-    // console.log(data);
     this.searchService.search(query);
-    // this.searchService.search(query);
-    // console.log(query);
-    // this.word$ = this.searchService.search(query);
-    // console.log(val$)
-    
     
   }
 

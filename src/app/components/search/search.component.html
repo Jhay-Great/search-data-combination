@@ -1,4 +1,4 @@
-<input type="search" name="search" id="search" (input)="searchWord(inputValue.value)" #inputValue>
+<input type="search" name="search" id="search" (input)="searchWord(inputValue.value)" #inputValue placeholder="enter name...">
 
 @if (word$ | async) {
     <p>
@@ -7,9 +7,3 @@
 
 }
 
-<!-- <div>
-    <input id="inputField" type="text" placeholder="Type something..." />
-    <p *ngIf="error$ | async as error" class="error">{{ error }}</p>
-    <p *ngIf="(inputValue$ | async) as value" class="result">You entered: {{ value }}</p>
-  </div> -->
-  
