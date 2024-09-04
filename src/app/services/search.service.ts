@@ -6,23 +6,33 @@ import { debounceTime, filter, map, of, scan, Subject, switchMap, tap } from 'rx
 })
 export class SearchService {
 
+  data = [
+    {name: 'James', gender: 'male', nationality: 'Ghanaian'},
+    {name: 'Beverly', gender: 'female', nationality: 'Ghanaian'},
+    {name: 'Joseph', gender: 'male', nationality: 'Ghanaian'},
+    {name: 'Michelle', gender: 'female', nationality: 'Ghanaian'},
+    {name: 'Emmanuel', gender: 'male', nationality: 'Ghanaian'},
+    {name: 'Felicity', gender: 'female', nationality: 'Ghanaian'},
+    {name: 'Emerald', gender: 'female', nationality: 'Ghanaian'},
+  ];
+
   private subject$ = new Subject<string[]>();
 
   constructor() { }
 
   private transform () {
 
-    return this.subject$.pipe(
-      debounceTime(500), // Debounce to limit how often the search is triggered
-      scan((acc, char) => acc + char, ''), // Accumulate characters into a string
-      map(query => query.trim()) // Trim spaces if necessary
-    )
+    // return this.subject$.pipe(
+    //   debounceTime(500), // Debounce to limit how often the search is triggered
+    //   scan((acc, char) => acc + char, ''), // Accumulate characters into a string
+    //   map(query => query.trim()) // Trim spaces if necessary
+    // )
     // .subscribe(query => {
     //   // Handle the final query here, e.g., make an HTTP request
     //   console.log('Final query:', query);
     // });
     
-    console.log()
+    // console.log()
 
     /**something */
     
