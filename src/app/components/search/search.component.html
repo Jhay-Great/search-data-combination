@@ -1,9 +1,26 @@
 <input type="search" name="search" id="search" (input)="searchWord(inputValue.value)" #inputValue placeholder="enter name...">
 
-@if (word$ | async) {
+@if (loading) {
     <p>
-        {{ word$ | async}}
+        loading data...
     </p>
-
 }
+
+@if (word$ | async) {
+    @for (data of word$ | async ; track $index) {
+        @if (data) {
+            <p>
+                {{ data.name }}
+            </p>
+
+        } @else {
+            <p>
+                Name not found
+            </p>
+
+        }
+    
+    }
+
+} 
 

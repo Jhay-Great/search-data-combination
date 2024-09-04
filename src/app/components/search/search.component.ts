@@ -22,13 +22,18 @@ export class SearchComponent {
   ) {
     this.word$ = this.searchService.searchResult()
     this.searchService.searchResult().subscribe(
-      val => console.log(val),  
+      val =>{ 
+        console.log('val: ', val)
+        this.loading = false;
+      },  
+
     )
     // this.word$ = this.searchService.getWord();
     // console.log(this.word$);
   }
 
   searchWord (query:string) {
+    this.loading = true;
     this.searchService.search(query);
     
   }
